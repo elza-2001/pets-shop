@@ -98,10 +98,12 @@ function makeCard(items) {
 function makeInterfaceByTemplate(item) {
   const shopItem = template.content.cloneNode(true);
   const tagsContainer = shopItem.querySelector('.tags');
-  const tag = document.createElement('span');
-  tag.classList.add('tags');
-  tag.textContent = item.tags;
-  tagsContainer.append(tag);
+  item.tags.forEach(tag => {
+    const tagText = document.createElement('span');
+    tagText.classList.add('tag');
+    tagText.textContent = tag;
+    tagsContainer.append(tagText);
+  });
 
   shopItem.querySelector('img').src = item.img;
   shopItem.querySelector('h1').textContent = item.title;
@@ -121,15 +123,16 @@ searchBtn.addEventListener('click', function() {
   const newSearch = [];
   const text = searchInput.value.toLowerCase().trim();
   container.innerHTML = '';
+  nothingFound.innerHTML = '';
 
-  items.forEach((item) => {
+  items.forEach(item => {
     if (item.title.toLowerCase().includes(text)) {
-      newSearch.push(JSON.stringify(item));
-      container.append(newSearch);
+      newSearch.push(item);
     } else {
       nothingFound.textContent = 'Ничего не найдено';
     };
   });
 
-  searchInput.value = '';
+  makeCard(newSearch);
+  container.append(newSearch);
 });
