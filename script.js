@@ -120,19 +120,15 @@ const searchInput = document.querySelector('#search-input');
 const nothingFound = document.querySelector('#nothing-found');
 
 searchBtn.addEventListener('click', function() {
-  const newSearch = [];
   const text = searchInput.value.toLowerCase().trim();
   container.innerHTML = '';
   nothingFound.innerHTML = '';
 
-  items.forEach(item => {
-    if (item.title.toLowerCase().includes(text)) {
-      newSearch.push(item);
-    } else {
-      nothingFound.textContent = 'Ничего не найдено';
-    };
-  });
+  const filteredItems = items.filter((el) => el.title.toLowerCase().includes(text));
 
-  makeCard(newSearch);
-  container.append(newSearch);
+  if (filteredItems.length > 0) {
+    makeCard(filteredItems);
+  } else {
+    nothingFound.textContent = 'Ничего не найдено';
+  };
 });
