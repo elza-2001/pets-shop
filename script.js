@@ -84,3 +84,51 @@ const items = [
     img: "./img/12.jpeg",
   },
 ];
+
+const container = document.querySelector('#shop-items');
+const template = document.querySelector('#item-template');
+
+function makeCard(items) {
+  items.forEach((item) => {
+    const newCard = makeInterfaceByTemplate(item);
+    container.append(newCard); 
+  });
+};
+
+function makeInterfaceByTemplate(item) {
+  const shopItem = template.content.cloneNode(true);
+  const tagsContainer = shopItem.querySelector('.tags');
+  item.tags.forEach(tag => {
+    const tagText = document.createElement('span');
+    tagText.classList.add('tag');
+    tagText.textContent = tag;
+    tagsContainer.append(tagText);
+  });
+
+  shopItem.querySelector('img').src = item.img;
+  shopItem.querySelector('h1').textContent = item.title;
+  shopItem.querySelector('p').textContent = item.description;
+  shopItem.querySelector('.price').textContent = item.price;
+
+  return shopItem;
+};
+
+makeCard(items);
+
+const searchBtn = document.querySelector('#search-btn');
+const searchInput = document.querySelector('#search-input');
+const nothingFound = document.querySelector('#nothing-found');
+
+searchBtn.addEventListener('click', function() {
+  const text = searchInput.value.toLowerCase().trim();
+  container.innerHTML = '';
+  nothingFound.innerHTML = '';
+
+  const filteredItems = items.filter((el) => el.title.toLowerCase().includes(text));
+
+  if (filteredItems.length > 0) {
+    makeCard(filteredItems);
+  } else {
+    nothingFound.textContent = 'Ничего не найдено';
+  };
+});
